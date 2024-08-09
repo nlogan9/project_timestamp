@@ -24,7 +24,25 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
+// get date from route paramater
+app.get("/api/:date?", (req, res) => {
+  let timestamp;
 
+  if (Number(req.params.date)) {
+    timestamp = new Date(Number(req.params.date));
+  } else if (!req.params.date) {
+    timestamp = new Date();
+  }else timestamp = new Date(req.params.date);
+  
+  let mystring = timestamp.valueOf();
+  console.log(mystring);
+
+  if (!mystring) {
+    console.log("test");
+    res.json({"error": "Invalid Date"});
+  } else res.json({"unix": Date.parse(timestamp), "utc": timestamp.toUTCString()});
+  
+})
 
 // Listen on port set in environment variable or default to 3000
 var listener = app.listen(process.env.PORT || 3000, function () {
